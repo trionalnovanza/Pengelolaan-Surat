@@ -1,5 +1,5 @@
 <?php
-$suratMasuk = $jumlah_surat['surat_masuk'] ?? 0;
+$suratMasuk = $jumlah_surat['proposal'] ?? 0;
 $suratKeluar = $jumlah_surat['surat_keluar'] ?? 0;
 ?>
 <div class="row">

@@ -9,7 +9,7 @@ class HomeModel extends Model
     public function getJumlahSurat(): array
     {
         return [
-            'surat_masuk'  => $this->countRows('surat_masuk', 'id_surat', 'total_surat_masuk'),
+            'proposal'  => $this->countRows('proposal', 'id_surat', 'total_proposal'),
             'surat_keluar' => $this->countRows('surat_keluar', 'id_surat', 'total_surat_keluar'),
         ];
     }
