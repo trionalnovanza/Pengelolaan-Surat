@@ -1,15 +1,19 @@
 <?php
 $baseUrl = base_url();
 $dataSuratMasuk = $data_surat_masuk ?? [];
+
+$session = session();
+$level = $session->get('level');
 ?>
 <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-green">
             <div class="panel-heading">
                 <?= 'Daftar ' . esc($judul) ?>&nbsp;&nbsp;
+                <?php if ($level == 1): ?>
                 <button class="btn btn-info" data-toggle="modal" data-target="#tambah_surat_masuk">
                     <i class="fa fa-envelope"></i> Tambah <?= esc($judul) ?>
-                </button>
+                </button><?php endif; ?>
             </div>
             <div class="panel-body">
                 <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
@@ -21,7 +25,8 @@ $dataSuratMasuk = $data_surat_masuk ?? [];
                         <th>Tanggal Masuk</th>
                         <th>Status</th>
                         <th>Catatan</th>
-                        <th>Action</th>
+                        <?php if ($level == 1): ?> <!-- hanya sekretaris -->
+                        <th>Action</th><?php endif; ?>
                     </tr>
                     </thead>
                     <tbody>
@@ -32,8 +37,34 @@ $dataSuratMasuk = $data_surat_masuk ?? [];
                             <td class="text-center" style="vertical-align: middle;"><?= esc($suratMasuk->nama_ormawa ?? '-') ?></td>
                             <td class="text-center" style="vertical-align: middle;"><?= esc($suratMasuk->judul ?? '-') ?></td>
                             <td class="text-center" style="vertical-align: middle;"><?= esc($suratMasuk->tgl_terima ?? '-') ?></td>
-                            <td class="text-center" style="vertical-align: middle;"><?= esc($suratMasuk->status_proposal ?? '-') ?></td>
+                            <!-- <td class="text-center" style="vertical-align: middle;"><?= esc($suratMasuk->status_proposal ?? '-') ?></td> -->
+                             <td class="text-center" style="vertical-align: middle;">
+                                <?php
+                                    $status = strtolower($suratMasuk->status_proposal ?? '');
+
+                                    switch ($status) {
+                                        case 'diterima':
+                                            $class = 'label label-success';
+                                            break;
+                                        case 'diproses':
+                                            $class = 'label label-primary';
+                                            break;
+                                        case 'direvisi':
+                                            $class = 'label label-warning';
+                                            break;
+                                        case 'ditolak':
+                                            $class = 'label label-danger';
+                                            break;
+                                        default:
+                                            $class = 'label label-default';
+                                    }
+                                ?>
+                                <span class="<?= $class ?>" style="border-radius: 12px; padding: 5px 10px;">
+                                    <?= esc(ucfirst($status)) ?>
+                                </span>
+                            </td>
                             <td class="text-center" style="vertical-align: middle;"><?= esc($suratMasuk->catatan ?? '-') ?></td>
+                            <?php if ($level == 1): ?> <!-- hanya sekretaris -->
                             <td class="text-center" style="vertical-align: middle;">
                                 <!-- <a href="<?php //base_url('/uploads/' . $suratMasuk->file_surat) ?>" class="btn btn-sm btn-info">Lihat</a> -->
                                 <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#ubah_surat_masuk" onclick="ubah_surat(<?= $suratMasuk->id_surat ?>)">Ubah</button>
@@ -41,6 +72,7 @@ $dataSuratMasuk = $data_surat_masuk ?? [];
                                 <!-- <a href="<?= base_url('home/disposisi/' . $suratMasuk->id_surat) ?>" class="btn btn-sm btn-primary">Disposisi</a> -->
                                 <a href="<?= base_url('home/hapus_surat_masuk/' . $suratMasuk->id_surat) ?>" class="btn btn-sm btn-danger">Hapus</a>
                             </td>
+                            <?php endif; ?>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -87,7 +119,6 @@ $dataSuratMasuk = $data_surat_masuk ?? [];
                     <div class="form-group">
                         <!-- <label>Status Proposal</label> -->
                         <!-- <input class="form-control" type="text" name="pengirim" required> -->
-                    <div class="form-group">
                         <label>Status Proposal</label>
                         <select class="form-control" name="status_proposal" required>
                             <option value="">-- Pilih Status --</option>
@@ -135,7 +166,14 @@ $dataSuratMasuk = $data_surat_masuk ?? [];
                     </div>
                     <div class="form-group">
                         <label>Status Proposal</label>
-                        <input class="form-control" type="text" name="ubah_status_proposal" id="ubah_status_proposal" required>
+                        <select class="form-control" name="ubah_status_proposal" id="ubah_status_proposal" required>
+                            <option value="">-- Pilih Status --</option>
+                            <option value="diajukan">Diajukan</option>
+                            <option value="diproses">Diproses</option>
+                            <option value="direvisi">Revisi</option>
+                            <option value="diterima">Diterima</option>
+                            <option value="ditolak">Ditolak</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>Catatan</label>

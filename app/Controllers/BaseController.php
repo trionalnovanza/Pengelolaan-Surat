@@ -35,6 +35,12 @@ abstract class BaseController extends Controller
         return $this->session->get('nama_jabatan') === 'Sekretaris';
     }
 
+
+    protected function isOrmawa(): bool
+    {
+        return (int) $this->session->get('level') === 4;
+    }
+
     protected function requireLogin(): ?RedirectResponse
     {
         if (! $this->isLoggedIn()) {

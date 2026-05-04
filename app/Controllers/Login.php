@@ -79,6 +79,7 @@ class Login extends BaseController
             'nama_pegawai' => $user->nama_pegawai,
             'nama_jabatan' => $user->nama_jabatan,
             'level'        => $user->level,
+            'ormawa_id'     => $user->ormawa_id,
         ]);
     }
 }
