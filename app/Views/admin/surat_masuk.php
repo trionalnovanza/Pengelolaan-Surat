@@ -15,6 +15,7 @@ $dataSuratMasuk = $data_surat_masuk ?? [];
                 <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
                     <thead>
                     <tr>
+                        <th>No</th>
                         <th>ORMAWA</th>
                         <th>Judul Kegiatan</th>
                         <th>Tanggal Masuk</th>
@@ -24,8 +25,10 @@ $dataSuratMasuk = $data_surat_masuk ?? [];
                     </tr>
                     </thead>
                     <tbody>
+                    <?php $no = 1; ?>
                     <?php foreach ($dataSuratMasuk as $suratMasuk): ?>
                         <tr>
+                            <td class="text-center" style="vertical-align: middle;"><?= $no++ ?></td>
                             <td class="text-center" style="vertical-align: middle;"><?= esc($suratMasuk->nama_ormawa ?? '-') ?></td>
                             <td class="text-center" style="vertical-align: middle;"><?= esc($suratMasuk->judul ?? '-') ?></td>
                             <td class="text-center" style="vertical-align: middle;"><?= esc($suratMasuk->tgl_terima ?? '-') ?></td>
@@ -35,7 +38,7 @@ $dataSuratMasuk = $data_surat_masuk ?? [];
                                 <!-- <a href="<?php //base_url('/uploads/' . $suratMasuk->file_surat) ?>" class="btn btn-sm btn-info">Lihat</a> -->
                                 <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#ubah_surat_masuk" onclick="ubah_surat(<?= $suratMasuk->id_surat ?>)">Ubah</button>
                                 <!-- <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#ubah_file_surat_masuk" onclick="ubah_surat(<?= $suratMasuk->id_surat ?>)">Ubah Surat</button> -->
-                                <a href="<?= base_url('home/disposisi/' . $suratMasuk->id_surat) ?>" class="btn btn-sm btn-primary">Disposisi</a>
+                                <!-- <a href="<?= base_url('home/disposisi/' . $suratMasuk->id_surat) ?>" class="btn btn-sm btn-primary">Disposisi</a> -->
                                 <a href="<?= base_url('home/hapus_surat_masuk/' . $suratMasuk->id_surat) ?>" class="btn btn-sm btn-danger">Hapus</a>
                             </td>
                         </tr>

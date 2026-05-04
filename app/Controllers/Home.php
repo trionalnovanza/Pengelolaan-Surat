@@ -40,8 +40,6 @@ class Home extends BaseController
     public function surat_masuk()
     {
         
-
-
         if ($redirect = $this->requireSekretaris()) {
             return $redirect;
         }
@@ -49,7 +47,7 @@ class Home extends BaseController
         $ormawaModel = new \App\Models\OrmawaModel();
 
         return $this->render('admin/surat_masuk', [
-            'judul'            => 'Proposal',
+            'judul'            => 'Proposal Kegiatan ORMAWA',
             'data_surat'       => null,
             'data_surat_masuk' => $this->homeModel->getSuratMasuk(),
             'ormawa'           => $ormawaModel->findAll(), // 🔥 TAMBAH
@@ -68,10 +66,13 @@ class Home extends BaseController
             return $redirect;
         }
 
+        $ormawaModel = new \App\Models\OrmawaModel();
+
         return $this->render('admin/surat_keluar', [
-            'judul'             => 'Laporan',
+            'judul'             => 'Laporan Kegiatan ORMAWA',
             'data_surat'        => null,
             'data_surat_keluar' => $this->homeModel->getSuratKeluar(),
+            'ormawa'            => $ormawaModel->findAll(),
         ]);
     }
 
@@ -192,21 +193,30 @@ class Home extends BaseController
             return $this->redirectWithNotif('home/surat_keluar', $this->validationErrorMessage());
         }
 
-        $upload = $this->uploadPdf('file_surat');
-        if (isset($upload['error'])) {
-            return $this->redirectWithNotif('home/surat_keluar', $upload['error']);
-        }
+        // $upload = $this->uploadPdf('file_surat');
+        // if (isset($upload['error'])) {
+        //     return $this->redirectWithNotif('home/surat_keluar', $upload['error']);
+        // }
 
-        $success = $this->homeModel->tambahSuratKeluar($this->suratKeluarPayload($upload['file_name']));
+        // $success = $this->homeModel->tambahSuratKeluar($this->suratKeluarPayload($upload['file_name']));
+
+        // if (! $success) {
+        //     $this->deleteUploadedFile($upload['file_name']);
+
+        //     return $this->redirectWithNotif('home/surat_keluar', 'Tambah Surat Gagal!');
+        // }
+
+        $success = $this->homeModel->tambahSuratKeluar(
+        $this->suratKeluarPayload()
+        );
 
         if (! $success) {
-            $this->deleteUploadedFile($upload['file_name']);
-
-            return $this->redirectWithNotif('home/surat_keluar', 'Tambah Surat Gagal!');
+            return $this->redirectWithNotif('home/surat_keluar', 'Tambah Surat Keluar Gagal!');
         }
 
         return $this->redirectWithNotif('home/surat_keluar', 'Tambah Surat Keluar Berhasil!');
-    }
+
+        }
 
     public function tambah_surat_masuk()
     {
@@ -451,21 +461,22 @@ class Home extends BaseController
     private function suratKeluarRules(): array
     {
         return [
-            'nomor_surat' => 'required',
+            'judul_j' => 'required',
             'tgl_kirim'   => 'required',
-            'tujuan'      => 'required',
-            'perihal'     => 'required',
+            'status_laporan'      => 'required',
+            'catatan'     => 'required',
+            'ormawa_id' => 'required|integer',
         ];
     }
 
-    private function suratKeluarPayload(string $fileName): array
+    private function suratKeluarPayload(): array
     {
         return [
-            'nomor_surat' => $this->postString('nomor_surat'),
+            'judul_j' => $this->postString('judul_j'),
             'tgl_kirim'   => $this->postString('tgl_kirim'),
-            'tujuan'      => $this->postString('tujuan'),
-            'perihal'     => $this->postString('perihal'),
-            'file_surat'  => $fileName,
+            'status_laporan'      => $this->postString('status_laporan'),
+            'catatan'     => $this->postString('catatan'),
+            'ormawa_id'   => $this->postInt('ormawa_id'),
         ];
     }
 
@@ -495,20 +506,20 @@ class Home extends BaseController
     {
         return [
             'ubah_id_surat'    => 'required|integer',
-            'ubah_nomor_surat' => 'required',
+            'ubah_judul_j' => 'required',
             'ubah_tgl_kirim'   => 'required',
-            'ubah_tujuan'      => 'required',
-            'ubah_perihal'     => 'required',
+            'ubah_status_laporan'      => 'required',
+            'ubah_catatan'     => 'required',
         ];
     }
 
     private function ubahSuratKeluarPayload(): array
     {
         return [
-            'nomor_surat' => $this->postString('ubah_nomor_surat'),
+            'judul_j' => $this->postString('ubah_judul_j'),
             'tgl_kirim'   => $this->postString('ubah_tgl_kirim'),
-            'tujuan'      => $this->postString('ubah_tujuan'),
-            'perihal'     => $this->postString('ubah_perihal'),
+            'status_laporan'      => $this->postString('ubah_status_laporan'),
+            'catatan'     => $this->postString('ubah_catatan'),
         ];
     }
 

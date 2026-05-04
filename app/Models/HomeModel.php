@@ -119,7 +119,11 @@ class HomeModel extends Model
 
     public function getSuratKeluar(): array
     {
-        return $this->db->table('surat_keluar')->get()->getResult();
+        return $this->db->table('surat_keluar')
+            ->select('surat_keluar.*, ormawa.nama_ormawa')
+            ->join('ormawa', 'ormawa.id = surat_keluar.ormawa_id', 'left')
+            ->get()
+            ->getResult();
     }
 
     public function getSuratMasuk(): array
