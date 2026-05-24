@@ -15,29 +15,24 @@ $dataSuratKeluar = $data_surat_keluar ?? [];
                 <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
                     <thead>
                     <tr>
-                        <th>No</th>
-                        <th>ORMAWA</th>
-                        <th>Judul Laporan Kegiatan</th>
-                        <th>Tanggal Masuk</th>
-                        <th>Status</th>
-                        <th>Catatan</th>
+                        <th>Nomor Surat</th>
+                        <th>Tanggal Kirim</th>
+                        <th>Tujuan</th>
+                        <th>Perihal</th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <?php $no = 1; ?>
                     <?php foreach ($dataSuratKeluar as $suratKeluar): ?>
                         <tr>
-                            <td class="text-center" style="vertical-align: middle;"><?= $no++ ?></td>
-                            <td class="text-center" style="vertical-align: middle;"><?= esc($suratKeluar->nama_ormawa) ?></td>
-                            <td class="text-center" style="vertical-align: middle;"><?= esc($suratKeluar->judul_j) ?></td>
+                            <td class="text-center" style="vertical-align: middle;"><?= esc($suratKeluar->nomor_surat) ?></td>
                             <td class="text-center" style="vertical-align: middle;"><?= esc($suratKeluar->tgl_kirim) ?></td>
-                            <td class="text-center" style="vertical-align: middle;"><?= esc($suratKeluar->status_laporan) ?></td>
-                            <td class="text-center" style="vertical-align: middle;"><?= esc($suratKeluar->catatan) ?></td>
+                            <td class="text-center" style="vertical-align: middle;"><?= esc($suratKeluar->tujuan) ?></td>
+                            <td class="text-center" style="vertical-align: middle;"><?= esc($suratKeluar->perihal) ?></td>
                             <td class="text-center" style="vertical-align: middle;">
-                                <!-- <a href="<?php //base_url('uploads/' . $suratKeluar->file_surat) ?>" class="btn btn-info btn-sm">Lihat</a> -->
+                                <a href="<?= base_url('uploads/' . $suratKeluar->file_surat) ?>" class="btn btn-info btn-sm">Lihat</a>
                                 <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#ubah_surat_keluar" onclick="ubah_surat(<?= $suratKeluar->id_surat ?>)">Ubah</button>
-                                <!-- <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ubah_file_surat_keluar" onclick="ubah_surat(<?php //$suratKeluar->id_surat ?>)">Ubah Surat</button> -->
+                                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ubah_file_surat_keluar" onclick="ubah_surat(<?= $suratKeluar->id_surat ?>)">Ubah Surat</button>
                                 <a href="<?= base_url('home/hapus_surat_keluar/' . $suratKeluar->id_surat) ?>" class="btn btn-danger btn-sm">Hapus</a>
                             </td>
                         </tr>
@@ -61,43 +56,25 @@ $dataSuratKeluar = $data_surat_keluar ?? [];
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Judul Laporan Kegiatan</label>
-                        <input class="form-control" type="text" name="judul_j" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Nama ORMAWA</label>
-                            <select class="form-control" name="ormawa_id" required>
-                                <option value="">-- Pilih ORMAWA --</option>
-                                <?php foreach ($ormawa as $o): ?>
-                                    <option value="<?= $o['id'] ?>">
-                                        <?= $o['nama_ormawa'] ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                        <label>Nomor Surat</label>
+                        <input class="form-control" type="text" name="nomor_surat" required>
                     </div>
                     <div class="form-group">
                         <label>Tanggal Kirim</label>
                         <input class="form-control" type="date" name="tgl_kirim" required>
                     </div>
                     <div class="form-group">
-                        <label>Status Laporan</label>
-                        <select class="form-control" name="status_laporan" required>
-                            <option value="">-- Pilih Status --</option>
-                            <option value="diajukan">Diajukan</option>
-                            <option value="diproses">Diproses</option>
-                            <option value="revisi">Revisi</option>
-                            <option value="diterima">Diterima</option>
-                            <option value="ditolak">Ditolak</option>
-                        </select>
+                        <label>Tujuan</label>
+                        <input class="form-control" type="text" name="tujuan" required>
                     </div>
                     <div class="form-group">
-                        <label>Catatan</label>
-                        <textarea class="form-control" rows="1" name="catatan" required></textarea>
+                        <label>Perihal</label>
+                        <textarea class="form-control" rows="1" name="perihal" required></textarea>
                     </div>
-                    <!-- <div class="form-group">
+                    <div class="form-group">
                         <label>File Surat</label>
                         <input class="form-control" type="file" accept="application/pdf" name="file_surat" required>
-                    </div> -->
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-info" data-dismiss="modal">Tutup</button>
@@ -121,28 +98,20 @@ $dataSuratKeluar = $data_surat_keluar ?? [];
                 <div class="modal-body">
                     <input type="hidden" name="ubah_id_surat" id="ubah_id_surat">
                     <div class="form-group">
-                        <label>Judul Laporan Kegiatan</label>
-                        <input class="form-control" type="text" name="ubah_judul_j" id="ubah_judul_j" required>
+                        <label>Nomor Surat</label>
+                        <input class="form-control" type="text" name="ubah_nomor_surat" id="ubah_nomor_surat" required>
                     </div>
                     <div class="form-group">
                         <label>Tanggal Kirim</label>
                         <input class="form-control" type="date" name="ubah_tgl_kirim" id="ubah_tgl_kirim" required>
                     </div>
                     <div class="form-group">
-                        <label>Status Laporan</label>
-                        <select class="form-control" name="ubah_status_laporan" id="ubah_status_laporan"required>
-                            <option value="">-- Pilih Status --</option>
-                            <option value="diajukan">Diajukan</option>
-                            <option value="diproses">Diproses</option>
-                            <option value="revisi">Revisi</option>
-                            <option value="diterima">Diterima</option>
-                            <option value="ditolak">Ditolak</option>
-                        </select>
+                        <label>Tujuan</label>
+                        <input class="form-control" type="text" name="ubah_tujuan" id="ubah_tujuan" required>
                     </div>
-
                     <div class="form-group">
-                        <label>Catatan</label>
-                        <textarea class="form-control" rows="1" name="ubah_catatan" id="ubah_catatan"
+                        <label>Perihal</label>
+                        <textarea class="form-control" rows="1" name="ubah_perihal" id="ubah_perihal"
                                   required></textarea>
                     </div>
                 </div>
@@ -155,15 +124,15 @@ $dataSuratKeluar = $data_surat_keluar ?? [];
     </div>
 </div>
 
-<!-- <div class="modal fade" id="ubah_file_surat_keluar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div class="modal fade" id="ubah_file_surat_keluar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form role="form" action="<?php// base_url('home/ubah_file_surat_keluar') ?>" method="post"
+            <form role="form" action="<?= base_url('home/ubah_file_surat_keluar') ?>" method="post"
                   enctype="multipart/form-data">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title text-center" id="myModalLabel">Ubah File <?php// esc($judul) ?></h4>
+                    <h4 class="modal-title text-center" id="myModalLabel">Ubah File <?= esc($judul) ?></h4>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="ubah_file_surat_id" id="ubah_file_surat_id">
@@ -175,21 +144,22 @@ $dataSuratKeluar = $data_surat_keluar ?? [];
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-info" data-dismiss="modal">Tutup</button>
-                    <input type="submit" value="Ubah File <?php// esc($judul) ?>" name="submit" class="btn btn-success">
+                    <input type="submit" value="Ubah File <?= esc($judul) ?>" name="submit" class="btn btn-success">
                 </div>
             </form>
         </div>
     </div>
-</div> -->
+</div>
 
 <script>
     function ubah_surat(id_surat) {
         const fields = [
             '#ubah_id_surat',
-            '#ubah_judul_j',
+            '#ubah_nomor_surat',
             '#ubah_tgl_kirim',
-            '#ubah_status_proposal',
-            '#ubah_catatan',
+            '#ubah_tujuan',
+            '#ubah_perihal',
+            '#ubah_file_surat_id'
         ];
 
         fields.forEach(function (selector) {
@@ -198,10 +168,11 @@ $dataSuratKeluar = $data_surat_keluar ?? [];
 
         $.getJSON('<?= base_url('home/get_surat_keluar_by_id/') ?>' + id_surat, function (data) {
             $('#ubah_id_surat').val(data.id_surat);
-            $('#ubah_judul_j').val(data.judul_j);
+            $('#ubah_nomor_surat').val(data.nomor_surat);
             $('#ubah_tgl_kirim').val(data.tgl_kirim);
-            $('#ubah_status_proposal').val(data.status_proposal);
-            $('#ubah_catatan').val(data.catatan);
+            $('#ubah_tujuan').val(data.tujuan);
+            $('#ubah_perihal').val(data.perihal);
+            $('#ubah_file_surat_id').val(data.id_surat);
         });
     }
 </script>
