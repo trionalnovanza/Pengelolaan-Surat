@@ -1,7 +1,6 @@
 <?php
 $session = session();
 $isSekretaris = $session->get('nama_jabatan') === 'Sekretaris';
-$isOrmawa     = $session->get('level') == 4;
 $notif = $session->getFlashdata('notif');
 $baseUrl = base_url();
 
@@ -28,35 +27,16 @@ $sidebarMenus = $isSekretaris ? [
         'label' => 'Dashboard',
     ],
     [
-        'url' => base_url('home/surat_masuk'),
-        'icon' => 'fa-envelope',
-        'label' => 'Proposal',
+        'url' => base_url('home/disposisi_keluar'),
+        'icon' => 'fa-mail-forward',
+        'label' => 'Disposisi Keluar',
     ],
     [
-        'url' => base_url('home/surat_keluar'),
-        'icon' => 'fa-envelope',
-        'label' => 'Laporan',
+        'url' => base_url('home/disposisi_masuk'),
+        'icon' => 'fa-mail-reply',
+        'label' => 'Disposisi Masuk',
     ],
 ];
-
-
-// ] : [
-//     [
-//         'url' => base_url('home'),
-//         'icon' => 'fa-dashboard',
-//         'label' => 'Dashboard',
-//     ],
-//     [
-//         'url' => base_url('home/disposisi_keluar'),
-//         'icon' => 'fa-mail-forward',
-//         'label' => 'Disposisi Keluar',
-//     ],
-//     [
-//         'url' => base_url('home/disposisi_masuk'),
-//         'icon' => 'fa-mail-reply',
-//         'label' => 'Disposisi Masuk',
-//     ],
-// ];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -70,7 +50,7 @@ $sidebarMenus = $isSekretaris ? [
     <meta name="author" content="">
 
     <title>Sistem Monitoring Proposal dan Laporan ORMAWA FASILKOM</title>
-    <link rel="icon" type="image/png" href="<?= $baseUrl ?>assets/img/favicon.png">
+
     <link href="<?= $baseUrl ?>assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?= $baseUrl ?>assets/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
     <link href="<?= $baseUrl ?>assets/dist/css/sb-admin-2.css" rel="stylesheet">

@@ -20,69 +20,36 @@ class Home extends BaseController
             return $redirect;
         }
 
-        $judul = 'Selamat Datang, ' . $this->currentUserName() . '!';
-
-        // if ($this->isSekretaris()) {
-        //     return $this->render('admin/dashboard', [
-        //         'judul'        => $judul,
-        //         'jumlah_surat' => $this->homeModel->getJumlahSurat(),
-        //         'data_surat'   => null,
-        //     ]);
-        // }
+        $judul = 'Welcome, ' . $this->currentUserName() . '!';
 
         if ($this->isSekretaris()) {
-            // ADMIN / SEKRETARIS → semua data
-            $jumlahSurat = $this->homeModel->getJumlahSurat();
-        } elseif ($this->isOrmawa()) {
-            // ORMAWA → hanya milik dia
-            $ormawaId = (int) $this->session->get('ormawa_id');
-            $jumlahSurat = $this->homeModel->getJumlahSuratByOrmawa($ormawaId);
-        } else {
-            // fallback (kalau ada role lain)
-            $jumlahSurat = [
-                'proposal' => 0,
-                'surat_keluar' => 0
-            ];
+            return $this->render('admin/dashboard', [
+                'judul'        => $judul,
+                'jumlah_surat' => $this->homeModel->getJumlahSurat(),
+                'data_surat'   => null,
+            ]);
         }
 
-        // return $this->render('pegawai/dashboard', [
-        //     'judul'            => $judul,
-        //     'jumlah_disposisi' => $this->homeModel->getJumlahDisposisi($this->currentUserPegawaiId()),
-        //     'data_surat'       => null,
-        // ]);
-
-        return $this->render('admin/dashboard', [
-                'judul'        => $judul,
-                'jumlah_surat' => $jumlahSurat,
-                'data_surat'   => null,
+        return $this->render('pegawai/dashboard', [
+            'judul'            => $judul,
+            'jumlah_disposisi' => $this->homeModel->getJumlahDisposisi($this->currentUserPegawaiId()),
+            'data_surat'       => null,
         ]);
     }
 
     public function surat_masuk()
     {
         
-        // if ($redirect = $this->requireSekretaris()) {
-        //     return $redirect;
-        // }
-
-        if ($redirect = $this->requireLogin()) {
+        if ($redirect = $this->requireSekretaris()) {
             return $redirect;
         }
 
         $ormawaModel = new \App\Models\OrmawaModel();
 
-        $ormawaId = $this->isOrmawa() ? $this->session->get('ormawa_id') : null;
-
-        if ($this->isOrmawa()) {
-            $dataSuratMasuk = $this->homeModel->getSuratMasukByOrmawa($ormawaId);
-        } else {
-            $dataSuratMasuk = $this->homeModel->getSuratMasuk();
-        }
-
         return $this->render('admin/surat_masuk', [
             'judul'            => 'Proposal Kegiatan ORMAWA',
             'data_surat'       => null,
-            'data_surat_masuk' => $dataSuratMasuk, // ✅ pakai variabel hasil filter
+            'data_surat_masuk' => $this->homeModel->getSuratMasuk(),
             'ormawa'           => $ormawaModel->findAll(), // 🔥 TAMBAH
         ]);
 
@@ -95,28 +62,16 @@ class Home extends BaseController
 
     public function surat_keluar()
     {
-        // if ($redirect = $this->requireSekretaris()) {
-        //     return $redirect;
-        // }
-
-        if ($redirect = $this->requireLogin()) {
+        if ($redirect = $this->requireSekretaris()) {
             return $redirect;
         }
 
         $ormawaModel = new \App\Models\OrmawaModel();
 
-        $ormawaId = $this->isOrmawa() ? $this->session->get('ormawa_id') : null;
-
-        if ($this->isOrmawa()) {
-            $dataSuratKeluar = $this->homeModel->getSuratKeluarByOrmawa($ormawaId);
-        } else {
-            $dataSuratKeluar = $this->homeModel->getSuratKeluar();
-        }
-
         return $this->render('admin/surat_keluar', [
             'judul'             => 'Laporan Kegiatan ORMAWA',
             'data_surat'        => null,
-            'data_surat_keluar' => $dataSuratKeluar,
+            'data_surat_keluar' => $this->homeModel->getSuratKeluar(),
             'ormawa'            => $ormawaModel->findAll(),
         ]);
     }
@@ -538,16 +493,12 @@ class Home extends BaseController
 
     private function suratMasukPayload(): array
     {
-        $ormawaId = $this->isOrmawa()
-            ? $this->session->get('ormawa_id') // 🔥 paksa dari session
-            : $this->postInt('ormawa_id');
-
         return [
             'judul' => $this->postString('judul'),
             'tgl_terima'  => $this->postString('tgl_terima'),
             'status_proposal'    => $this->postString('status_proposal'),
             'catatan'    => $this->postString('catatan'),
-            'ormawa_id' => $ormawaId,
+            'ormawa_id' => $this->postInt('ormawa_id'),
         ];
     }
 

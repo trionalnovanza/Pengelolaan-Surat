@@ -14,22 +14,6 @@ class HomeModel extends Model
         ];
     }
 
-    public function getJumlahSuratByOrmawa(int $ormawaId): array
-    {
-        $proposal = $this->db->table('proposal');
-        $suratKeluar = $this->db->table('surat_keluar');
-
-        if ($ormawaId !== null) {
-            $proposal->where('ormawa_id', $ormawaId);
-            $suratKeluar->where('ormawa_id', $ormawaId);
-        }
-
-        return [
-            'proposal' => $proposal->countAllResults(),
-            'surat_keluar' => $suratKeluar->countAllResults(),
-        ];
-    }
-
     public function getJumlahDisposisi(int $idPegawai): array
     {
         return [
@@ -172,24 +156,6 @@ class HomeModel extends Model
             ->where('proposal.id_surat', $idSurat)
             ->get()
             ->getRow();
-    }
-
-    public function getSuratMasukByOrmawa($ormawaId)
-    {
-        return $this->db->table('proposal')
-            ->join('ormawa', 'ormawa.id = proposal.ormawa_id')
-            ->where('proposal.ormawa_id', $ormawaId)
-            ->get()
-            ->getResult();
-    }
-
-    public function getSuratKeluarByOrmawa($ormawaId)
-    {
-        return $this->db->table('surat_keluar')
-            ->join('ormawa', 'ormawa.id = surat_keluar.ormawa_id')
-            ->where('surat_keluar.ormawa_id', $ormawaId)
-            ->get()
-            ->getResult();
     }
 
     public function getNamaFileSuratKeluar(int $idSurat): ?string
