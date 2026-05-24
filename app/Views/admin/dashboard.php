@@ -2,6 +2,7 @@
 $suratMasuk = $jumlah_surat['proposal'] ?? 0;
 $suratKeluar = $jumlah_surat['surat_keluar'] ?? 0;
 ?>
+
 <div class="row">
     <div class="col-lg-6 col-md-6">
         <div class="panel panel-primary">

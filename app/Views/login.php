@@ -14,7 +14,7 @@ $baseUrl = base_url();
     <meta name="author" content="">
 
     <title>Login-Sistem Monitoring Proposal dan Laporan ORMAWA FASILKOM UNSRI</title>
-
+    
     <link href="<?= $baseUrl ?>assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?= $baseUrl ?>assets/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
     <link href="<?= $baseUrl ?>assets/dist/css/sb-admin-2.css" rel="stylesheet">
@@ -46,7 +46,7 @@ $baseUrl = base_url();
                     <form role="form" method="post" action="<?= base_url('login/validate') ?>">
                         <fieldset>
                             <div class="form-group">
-                                <input class="form-control" placeholder="NIK" name="nik" type="number" autofocus>
+                                <input class="form-control" placeholder="Username" name="nik" type="number" autofocus>
                             </div>
                             <div class="form-group">
                                 <input class="form-control" placeholder="Kata Sandi" name="password" type="password">
